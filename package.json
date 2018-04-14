@@ -1,0 +1,30 @@
+{
+  "name": "apijira",
+  "version": "1.0.0",
+  "description": "Backend encargado de comunicarse con el frontend",
+  "main": "auth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://luciofondon@bitbucket.org/tfmunex/apijira.git"
+  },
+  "author": "@luciofondon",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/tfmunex/apijira#readme",
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "method-override": "^2.3.10",
+    "middleware": "^1.0.0",
+    "moment": "^2.19.1",
+    "mongodb": "^3.0.0-rc0",
+    "morgan": "^1.9.0",
+    "request": "^2.83.0",
+    "utf8": "^3.0.0"
+  }
+}
