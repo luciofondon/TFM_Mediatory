@@ -7,6 +7,7 @@ apps: [
         logo: "https://www.redmineup.com/cms/assets/thumbnail/33796/600/jira_logo.png",
         authentication : {
             url: "api/",
+			method: "POST",
             type: "body",
             params: [
                 {id: "email", name : "Correo electrónico", description: "Email del usuario con permisos de administrador"},
@@ -14,8 +15,8 @@ apps: [
             ]
         },
         api: [
-            addProject: "/rest/api/2/project",
-            getProject: "/rest/api/2/project"
+            addProject: {url: "/rest/api/2/project", method: "POST"},
+            getProject: {url: "/rest/api/2/project", method: "GET"}
         ]
     },
     {
