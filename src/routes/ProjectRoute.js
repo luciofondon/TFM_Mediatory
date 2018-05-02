@@ -7,6 +7,8 @@ module.exports = function(app) {
     
       var projectController = require('../controllers/ProjectController')();
     
-      app.route('/api/project/:app')
-        .post(projectController.create);
+      app.route('/api/projects')
+	    .get(projectController.readAllProject)
+        .post(projectController.createProject);
+	
 }
