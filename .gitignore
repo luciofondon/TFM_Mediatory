@@ -22,7 +22,7 @@ Icon
 # Node Files
 # --------------------
 npm-debug.log
-*/node_modules/*
+node_modules/*
 
 # --------------------
 # vim Files

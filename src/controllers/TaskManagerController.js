@@ -1,13 +1,14 @@
-var  taskManagerDAO = require('../services/TaskManagerDAO');
+var  taskManagerService = require('../services/TaskManagerService');
 
 module.exports = function(db) {
 
     return {
         checkComunication: function(req, res) {
-            taskManagerDAO.checkComunication(req, res);
-        },
+            taskManagerService.checkComunication(req, res);
+		},
+
         getApps: function(req, res) {
-            taskManagerDAO.getApps(req, res);
+            taskManagerService.getApps(req, res);
         }
     }
 }
