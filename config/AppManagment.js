@@ -34,5 +34,21 @@ apps: [
             addProject: "/redmine/projects.json",
             getProject: "/redmine/projects.json"
         ]
+    },
+	{
+        id: "trello",
+        name: "Trello",
+        logo: "https://blog.desdelinux.net/wp-content/uploads/2013/05/redmine.png",
+        authentication : {
+            url: "api/",
+            type: "header"
+            params: [
+                {id: "token", name : "Token", description: "Token disponible a través de la cuenta de administrador"}
+            ]
+        },
+        api: [
+            addProject: "/redmine/projects.json",
+            getProject: "/redmine/projects.json"
+        ]
     }
 ]
