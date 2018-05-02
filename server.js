@@ -22,11 +22,9 @@ app.use(router);
 //Anadir routes de los controladores
 require('./src/routes/IssueRoute')(app);
 require('./src/routes/ProjectRoute')(app);
-
+require('./src/routes/TaskManagerRoute')(app);
 
 
 app.listen(config.SERVER_PORT, function() {
-    console.log("Node server Jira running on http://localhost:" + config.SERVER_PORT);
+    console.log("INFO: TFM Mediatory running on http://localhost:" + config.SERVER_PORT);
 });
-
-
