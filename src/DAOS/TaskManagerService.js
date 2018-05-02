@@ -1,4 +1,5 @@
-var  httpService = require('../services/HttpService');
+var httpService = require('../services/HttpService'),
+	configApp = = require('../services/ConfigApp');
 
 
 exports.checkComunication = function(req, res) {
