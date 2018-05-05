@@ -1,5 +1,5 @@
 var httpService = require('../services/HttpService'),
-	appManagement = require('../../config/AppManagment');
+	appManagement = require('../../config/AppManagement');
 
 
 exports.checkComunication = function(req, res) {

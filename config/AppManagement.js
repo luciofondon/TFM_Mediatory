@@ -15,7 +15,7 @@ module.exports = {
 			},
 			api: {
 				addProject: {url: "/rest/api/2/project", method: "POST"},
-				getProject: {url: "/rest/api/2/project", method: "GET"}
+				getProject: {url: "/rest/api/2/project", method: "GET", format: function(){}}
 			}
 		},
 		{
@@ -32,7 +32,16 @@ module.exports = {
 			},
 			api: {
 				addProject: "/redmine/projects.json",
-				getProject: "/redmine/projects.json"
+				getProjects: {	url: "/redmine/projects.json",
+								method: "GET",
+								format: function(response){
+									let projectsFormat = [];
+									response.projects.forEach(function(project){
+										projectsFormat.push({id: project.id, name: project.name})
+									});
+									return projectsFormat;
+								}
+							}
 			}
 		},
 		{
