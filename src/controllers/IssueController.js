@@ -4,8 +4,12 @@ var  issueService = require('../services/IssueService');
 module.exports = function(db) {
 
     return {
-        create: function(req, res) {
-            issueService.createIssue(req, res);
-        }
+        createIssues: function(req, res) {
+            issueService.createIssues(req, res);
+		},
+
+		readAllIssues: function(req, res) {
+            issueService.readAllIssues(req, res);
+		}
     }
 }

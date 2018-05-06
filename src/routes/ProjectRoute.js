@@ -5,10 +5,12 @@
 
 module.exports = function(app) {
 
-      var projectController = require('../controllers/ProjectController')();
+    var projectController = require('../controllers/ProjectController')();
 
-      app.route('/api/projects/all')
-	    .post(projectController.readAllProject);
-        //.post(projectController.createProject);
+    app.route('/api/projects/all')
+		.post(projectController.readAllProject);
+
+	app.route('/api/projects/create')
+    	.post(projectController.createProject);
 
 }

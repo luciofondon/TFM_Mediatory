@@ -7,17 +7,90 @@ var base64 = require('base-64'),
 
 var httpService = require('./HttpService'),
 	appManagement = require('../../config/AppManagement');
-	var request = require("request");
+
+var request = require("request");
 
 exports.createProject = function(req, res) {
     createProject(req, res);
-}
+};
 
 exports.readAllProject = function(req, res) {
     readAllProject(req, res);
-}
+};
+
+//let token = 'f5785d571a9266a99d5624f2db99e914c7dda844';
+//let ip = "158.49.112.112";
 
 function createProject(req, res){
+	let serverTaskManager = req.body.config;
+	let project = req.body.project;
+	let configApp = {};
+
+	appManagement.apps.forEach(function(app){
+		if(app.id == serverTaskManager.app){
+			configApp = app;
+		}
+	});
+	let ip = serverTaskManager.ip + ":" + serverTaskManager.port;
+	let token = serverTaskManager.token;
+
+	var options = {
+		method: configApp.api.addProject.method,
+	 	url: 'http://' + ip + configApp.api.addProject.url,
+		headers: {
+			'content-type': 'application/json'
+		},
+		json: configApp.api.addProject.formatRequest(project.name, project.key, project.description)
+	};
+	options.headers[configApp.authentication.headerKey] = token;
+
+	request(options, function (error, response, body) {
+		if (error)
+			res.status(500).json({error: "No se ha podido realizar la petición"});
+		else if(response.statusCode >= 400 && response.statusCode <= 500){
+			res.status(response.statusCode).json({error: body.errors[0]});
+		}else{
+			res.status(response.statusCode).json(configApp.api.addProject.formatResponse(body));
+		}
+	});
+}
+
+function readAllProject(req, res){
+	let configServer = req.body
+	let configApp = {};
+	appManagement.apps.forEach(function(app){
+		if(app.id == configServer.app){
+			configApp = app;
+		}
+	});
+
+	let ip = configServer.ip + ":" + configServer.port;
+	let token = configServer.token;
+
+	var options = { method: configApp.api.getProjects.method,
+	 	 url: 'http://' + ip + configApp.api.getProjects.url,
+	 	 headers: {
+			'content-type': 'application/json'
+		}
+	};
+	options.headers[configApp.authentication.headerKey] = token;
+
+	request(options, function (error, response, body) {
+		if (error)
+			res.status(500).json({error: "No se ha podido realizar la petición"});
+		else if(response.statusCode >= 400 && response.statusCode <= 500){
+			res.status(response.statusCode).json({error: body.errors[0]});
+		}else{
+			let format = configApp.api.getProjects.format(JSON.parse(body));
+			res.status(response.statusCode).json(format);
+		}
+	});
+}
+
+
+/*
+
+function createProject2(req, res){
     let header = {};
     let body = {};
     if(req.params.app == "jira"){
@@ -57,26 +130,4 @@ function createProject(req, res){
         httpService.post(req.body.ip, req.body.port, config.URL_REDMINE_PROJECT, header, body, res);
     }
 }
-
-function readAllProject(req, res){
-	let configServer = req.body
-	let configApp = {};
-	appManagement.apps.forEach(function(app){
-		if(app.id == configServer.app){
-			configApp = app;
-		}
-	});
-
-	//let ip = configServer.app + ":" + configServer.port;
-	let ip = "158.49.112.112";
-	var options = { method: configApp.api.getProjects.method,
-	 	 url: 'http://' + ip + configApp.api.getProjects.url,
-	 	 headers: {'content-type': 'application/json' }
-	};
-	request(options, function (error, response, body) {
-		if (error) throw new Error(error);
-		let projectsFormat = [];
-		let format = configApp.api.getProjects.format(JSON.parse(body))
-		res.status(response.statusCode).json(format);
-	});
-}
+*/
