@@ -95,7 +95,7 @@ module.exports = {
 			authentication : {
 				headerKey: "authorization",
 				formatAuthentication: function(params){
-					return 'Basic ' +  base64.encode(utf8.encode(params[0] +  ":" +  params[1])),
+					return 'Basic ' +  base64.encode(utf8.encode(params[0] +  ":" +  params[1]));
 				},
 				params: [
 					{
