@@ -1,3 +1,6 @@
+var base64 = require('base-64'),
+    utf8 = require('utf8');
+
 module.exports = {
 	apps: [
 		{
@@ -90,9 +93,9 @@ module.exports = {
 			name: "Jira Atlassian",
 			logo: "https://www.redmineup.com/cms/assets/thumbnail/33796/600/jira_logo.png",
 			authentication : {
-				headerKey: "authentication",
+				headerKey: "authorization",
 				formatAuthentication: function(params){
-					
+					return 'Basic ' +  base64.encode(utf8.encode(params[0] +  ":" +  params[1])),
 				},
 				params: [
 					{
