@@ -81,7 +81,7 @@ function readAllProject(req, res){
 		else if(response.statusCode >= 400 && response.statusCode <= 500){
 			res.status(response.statusCode).json({error: body.errors[0]});
 		}else{
-			let format = configApp.api.getProjects.format(JSON.parse(body));
+			let format = configApp.api.getProjects.formatResponse(JSON.parse(body));
 			res.status(response.statusCode).json(format);
 		}
 	});
