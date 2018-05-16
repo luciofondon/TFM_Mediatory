@@ -38,7 +38,7 @@ function readAllIssues(req, res){
 		else if(response.statusCode >= 400 && response.statusCode <= 500){
 			res.status(response.statusCode).json({error: body.errors != undefined ? body.errors[0] : "Error en la conexion"});
 		}else{
-			let format = configApp.api.getIssues.format(JSON.parse(body));
+			let format = configApp.api.getIssues.formatResponse(JSON.parse(body));
 			res.status(response.statusCode).json(format);
 		}
 	});

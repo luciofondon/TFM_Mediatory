@@ -49,7 +49,7 @@ module.exports = {
 				getProjects:{
 								url: "/redmine/projects.json",
 								method: "GET",
-								formatRequest: function(response){
+								formatResponse: function(response){
 									let projectsFormat = [];
 									response.projects.forEach(function(project){
 										projectsFormat.push({id: project.id, name: project.name})
@@ -60,7 +60,7 @@ module.exports = {
 				getIssues:{
 								url: "/redmine/issues.json?project_id=",
 								method: "GET",
-								formatRequest: function(issuesRedmine){
+								formatResponse: function(issuesRedmine){
 									let issuesFormat = [];
 									issuesRedmine.issues.forEach(function(issue){
 										issuesFormat.push({	id: issue.id,
@@ -156,7 +156,7 @@ module.exports = {
 				getIssues:{
 								url: "/redmine/issues.json?project_id=",
 								method: "GET",
-								formatRequest: function(issuesJira){
+								formatResponse: function(issuesJira){
 									let issuesFormat = [];
 									issuesRedmine.issues.forEach(function(issue){
 										issuesFormat.push({	id: issue.id,
