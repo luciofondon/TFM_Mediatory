@@ -12,6 +12,7 @@ exports.getApps = function(req, res) {
 };
 
 function getApps(req, res){
+	console.log("entra")
 	let response = [];
 	appManagement.apps.forEach(function(app){
 		let item = {};
@@ -21,6 +22,7 @@ function getApps(req, res){
 		item.authentication = app.authentication.params;
 		response.push(item);
 	});
+	console.log("Devolviendo")
 	res.json(response);
 }
 

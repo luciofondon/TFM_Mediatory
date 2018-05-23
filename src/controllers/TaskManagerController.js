@@ -8,6 +8,7 @@ module.exports = function(db) {
 		},
 
         getApps: function(req, res) {
+			console.log("Entra")
             taskManagerService.getApps(req, res);
         }
     }
