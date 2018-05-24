@@ -7,9 +7,9 @@
 
 var request = require('request'),
     Promise = require('promise');
-    
+
 const config = require('../../config/config');
-   
+
 module.exports = {
     /**
      * @param  {} ip Direccion ip del servidor que se va atacar
@@ -17,8 +17,8 @@ module.exports = {
      * @param  {} data Informacion que se va a mandar en formato JSON
      * @description Realizar una peticion post
      */
-    post: function(ip, resource, data) {
-        return post(ip, resource, data);
+    post: function(ip, header, resource, data) {
+        return post(ip, header, resource, data);
     },
 
     /**
@@ -26,9 +26,28 @@ module.exports = {
      * @param  {} resource Recurso de la API a la que atacar
      * @description Realizar una peticion get
      */
-    get: function(ip, resource) {
-        return get(ip, resource);
+    get: function(ip, header, resource) {
+        return get(ip, header, resource);
     }
+}
+
+function get(ip, header, resource){
+    let promise = new Promise(function(resolve, reject){
+        request(
+            {
+                method: 'GET',
+                uri: 'http://' + ip + "/" + resource,
+                headers: header
+            },
+            function (error, response, body) {
+                if(error || response.statusCode >= 400 )
+                    reject({error: error, response: response, body: body});
+                else
+					resolve({error: error, response: response, body: body});
+            }
+        );
+    });
+    return promise;
 }
 
 function post(ip, header, resource, data){
@@ -41,40 +60,16 @@ function post(ip, header, resource, data){
                 json: data
             },
             function (error, response, body) {
-                console.log(error)
-                console.log(response)
-                console.log(body)
                 if(error || response.statusCode >= 400 )
-                    reject(error, response, body);
+                    reject({error: error, response: response, body: body});
                 else
-                    resolve(error, response, body);
+                    resolve({error: error, response: response, body: body});
             }
         );
     });
     return promise;
 }
 
-function get(ip, header, resource){
-    let promise = new Promise(function(resolve, reject){
-        request(
-            {
-                method: 'GET',
-                uri: 'http://' + ip + resource,
-                headers: header
-            },
-            function (error, response, body) {
-                console.log(error)
-                console.log(response)
-                console.log(body)
-                if(error || response.statusCode >= 400 )
-                    reject(error, response, body);
-                else
-                    resolve(error, response, body);
-            }
-        );
-    });
-    return promise;
-}
 
 /*
 

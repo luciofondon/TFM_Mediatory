@@ -10,15 +10,15 @@ var httpService = require('../services/HttpService'),
 	appManagement = require('../../config/AppManagement');
 
 module.exports = {
-	
+
 	/**
 	 * @param  {} config Configuracion del servidor con el que se va a intentar conectar
 	 * @description Comprueba que la comunicacion es satisfactoria con el servidor
 	 */
-	checkComunication = function(config) {
+	checkComunication: function(config) {
 		return checkComunication(config);
 	},
-	
+
 	/**
 	 * @description Devuelve la configuracion de todas las aplicationes de terceros disponibles
 	 */
@@ -38,8 +38,6 @@ function getApps(){
 			item.authentication = app.authentication.params;
 			response.push(item);
 		});
-		console.log("getApps")
-		console.log(response)
 		resolve({code: 200, data: response});
 	});
 	return promise;
@@ -49,7 +47,7 @@ function checkComunication(config){
 	let promise = new Promise(function(resolve, reject){
 		let configApp = {};
 		appManagement.apps.forEach(function(app){
-			if(app.id == configServer.app){
+			if(app.id == config.app){
 				configApp = app;
 			}
 		});
@@ -58,10 +56,10 @@ function checkComunication(config){
 		let header = {
 			'content-type': 'application/json'
 		};
-		header[configApp.authentication.headerKey] = token;
+		header[configApp.authentication.headerKey] = config.token;
 
-		httpService.get(ip, header, configApp.api.getProjects.url).then(function(error, response, body){
-			reject({code: 200, data: "Se ha establecido la conexión correctamente"})
+		httpService.get(ip, header, configApp.api.getProjects.url).then(function(data){
+			resolve({code: 200, data: "Se ha establecido la conexión correctamente"})
 		}).catch(function(error, response, body){
 			reject({code: 500, error: "No se ha establecido la conexión correctamente"})
 		});
@@ -71,7 +69,7 @@ function checkComunication(config){
 
 
 		/*
-		
+
 				//let configServer = req.body
 let ip = configServer.ip + ":" + configServer.port;
 		let token = configServer.token;

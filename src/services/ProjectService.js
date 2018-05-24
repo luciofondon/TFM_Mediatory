@@ -16,7 +16,7 @@ module.exports = {
 	 * @param  {} project Parametros del proyeto que se desea crear
 	 * @description Crea un proyecto en Jira/redmine...
 	 */
-	createProject = function(config, project) {
+	createProject: function(config, project) {
 		return createProject(config, project);
 	},
 	/**
@@ -26,6 +26,38 @@ module.exports = {
 	readAllProject: function(config) {
 		return readAllProject(config);
 	}
+}
+
+
+function readAllProject(config){
+	let promise = new Promise(function(resolve, reject){
+		let configApp = {};
+		appManagement.apps.forEach(function(app){
+			if(app.id == config.app){
+				configApp = app;
+			}
+		});
+
+		let ip = config.ip + ":" + config.port;
+		let header = {
+			'content-type': 'application/json'
+		};
+		header[configApp.authentication.headerKey] = config.token;
+
+		httpService.get(ip, header, configApp.api.getProjects.url).then(function(data){
+			let format = configApp.api.getProjects.formatResponse(JSON.parse(data.body));
+			resolve({code: data.response.statusCode, data: format});
+		}).catch(function(data){
+			if (error)
+				reject({code: data.response.statusCode, error: "No se ha podido realizar la petición"})
+			else if(data.response.statusCode >= 400 && data.response.statusCode <= 500){
+				reject({code: response.statusCode, error: data.body.errors[0]})
+			}else{
+				reject({code: 500, error: "No se ha podido realizar la petición"})
+			}
+		});
+	});
+	return promise;
 }
 
 function createProject(config, project){
@@ -57,39 +89,6 @@ function createProject(config, project){
 	});
 }
 
-function readAllProject(config){
-	let promise = new Promise(function(resolve, reject){
-		let configApp = {};
-		appManagement.apps.forEach(function(app){
-			if(app.id == config.app){
-				configApp = app;
-			}
-		});
-
-		let ip = config.ip + ":" + config.port;
-		let token = config.token;
-		let header = {
-			'content-type': 'application/json'
-		};
-		header[configApp.authentication.headerKey] = token;
-
-		httpService.get(ip, configApp.api.getProjects.url).then(function(error, response, body){
-			console.log("readAllProject")
-			console.log(JSON.parse(body))
-			let format = configApp.api.getProjects.formatResponse(JSON.parse(body));
-			resolve({code: response.statusCode, data: format})
-		}).catch(function(error, response, body){
-			if (error)
-				reject({code: response.statusCode, error: "No se ha podido realizar la petición"})
-			else if(response.statusCode >= 400 && response.statusCode <= 500){
-				reject({code: response.statusCode, error: body.errors[0]})
-			}else{
-				reject({code: 500, error: "No se ha podido realizar la petición"})
-			}
-		});
-	});
-	return promise;
-}
 
 //let token = 'f5785d571a9266a99d5624f2db99e914c7dda844';
 //let ip = "158.49.112.112";
@@ -298,4 +297,3 @@ function createProject2(req, res){
     }
 }
 */
->>>>>>> 0588f91cb56eb027066c46f0ee0c35dd6e7644c1
