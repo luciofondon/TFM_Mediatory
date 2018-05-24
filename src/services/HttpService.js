@@ -1,13 +1,82 @@
+
+
+/**
+ * @author Lucio David Fondon Terron - 2018
+ * @description Servicio para realizar peticion HTTP
+ */
+
 var request = require('request'),
-    config = require('../../config/config');
+    Promise = require('promise');
+    
+const config = require('../../config/config');
+   
+module.exports = {
+    /**
+     * @param  {} ip Direccion ip del servidor que se va atacar
+     * @param  {} resource Recurso de la API a la que atacar
+     * @param  {} data Informacion que se va a mandar en formato JSON
+     * @description Realizar una peticion post
+     */
+    post: function(ip, resource, data) {
+        return post(ip, resource, data);
+    },
 
-exports.post = function(server, port, resource, header, body, res) {
-    post(server, port, resource, header, body, res);
-};
+    /**
+     * @param  {} ip Direccion ip del servidor que se va atacar
+     * @param  {} resource Recurso de la API a la que atacar
+     * @description Realizar una peticion get
+     */
+    get: function(ip, resource) {
+        return get(ip, resource);
+    }
+}
 
-exports.get = function(server, port, resource, header, body, res) {
-    post(server, port, resource, header, body, res);
-};
+function post(ip, header, resource, data){
+    let promise = new Promise(function(resolve, reject){
+        request(
+            {
+                method: 'POST',
+                uri: 'http://' + ip + resource,
+                headers: header,
+                json: data
+            },
+            function (error, response, body) {
+                console.log(error)
+                console.log(response)
+                console.log(body)
+                if(error || response.statusCode >= 400 )
+                    reject(error, response, body);
+                else
+                    resolve(error, response, body);
+            }
+        );
+    });
+    return promise;
+}
+
+function get(ip, header, resource){
+    let promise = new Promise(function(resolve, reject){
+        request(
+            {
+                method: 'GET',
+                uri: 'http://' + ip + resource,
+                headers: header
+            },
+            function (error, response, body) {
+                console.log(error)
+                console.log(response)
+                console.log(body)
+                if(error || response.statusCode >= 400 )
+                    reject(error, response, body);
+                else
+                    resolve(error, response, body);
+            }
+        );
+    });
+    return promise;
+}
+
+/*
 
 function post(server, port, resource, header, body, res){
     let options = {
@@ -24,7 +93,7 @@ function post(server, port, resource, header, body, res){
 
     });
 }
-
+*/
 
 
 

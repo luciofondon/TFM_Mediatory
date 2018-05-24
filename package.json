@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://luciofondon@bitbucket.org/tfmunex/apijira.git"
+    "url": "git@github.com:luciofondon/TFM_Mediatory.git"
   },
   "author": "@luciofondon",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "mongodb": "^3.0.0-rc0",
     "morgan": "^1.9.0",
     "request": "^2.83.0",
-    "utf8": "^3.0.0"
-  }
+    "utf8": "^3.0.0",
+    "promise": "^8.0.1"
+  } 
 }
