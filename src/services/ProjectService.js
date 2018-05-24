@@ -45,10 +45,14 @@ function createProject(req, res){
 	options.headers[configApp.authentication.headerKey] = token;
 
 	request(options, function (error, response, body) {
+		console.log(error)
+		console.log(response)
+		console.log(body)
+
 		if (error)
 			res.status(500).json({error: "No se ha podido realizar la petición"});
 		else if(response.statusCode >= 400 && response.statusCode <= 500){
-			res.status(response.statusCode).json({error: body.errors[0]});
+			res.status(response.statusCode).json({error: body != undefined ? body.errors[0]:  "No se ha podido realizar la petición"});
 		}else{
 			res.status(response.statusCode).json(configApp.api.addProject.formatResponse(body));
 		}
