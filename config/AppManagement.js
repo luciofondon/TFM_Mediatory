@@ -20,7 +20,7 @@ module.exports = {
 				]
 			},
 			api: {
-				addProject: {
+				createProject: {
 								url: "/redmine/projects.json",
 								method: "POST",
 								formatRequest: function(name, key, description){
@@ -38,10 +38,10 @@ module.exports = {
 								},
 								formatResponse: function(projectRedmine){
 									let projectFormat = {
-										"id": projectRedmine.id,
-										"name": projectRedmine.name,
-										"key": projectRedmine.identifier,
-										"description": projectRedmine.description
+										"id": projectRedmine.project.id,
+										"name": projectRedmine.project.name,
+										"key": projectRedmine.project.identifier,
+										"description": projectRedmine.project.description
 									};
 									return projectFormat;
 								}
@@ -111,7 +111,7 @@ module.exports = {
 				]
 			},
 			api: {
-				addProject: {
+				createProject: {
 								url: "/rest/api/2/project",
 								method: "POST",
 								formatRequest: function(name, key, description){

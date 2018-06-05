@@ -19,7 +19,6 @@ module.exports = {
 
 function readAllIssues(config){
 	let promise = new Promise(function(resolve, reject){
-
 		let configApp = {};
 		appManagement.apps.forEach(function(app){
 			if(app.id == config.app){
@@ -34,7 +33,7 @@ function readAllIssues(config){
 		header[configApp.authentication.headerKey] = config.token;
 
 		httpService.get(ip, header, configApp.api.getIssues.url + config.project).then(function(data){
-			let format = configApp.api.getIssues.formatResponse(JSON.parse(body));
+			let format = configApp.api.getIssues.formatResponse(JSON.parse(data.body));
 			resolve({code: data.response.statusCode, data: format});
 		}).catch(function(data){
 			if (error)
@@ -78,45 +77,44 @@ let ip = config.ip + ":" + config.port;
 
 function createIssues(config, issues){
 	let promise = new Promise(function(resolve, reject){
-
+		console.log("entra")
 		let configApp = {};
-
 		appManagement.apps.forEach(function(app){
 			if(app.id == config.app){
 				configApp = app;
 			}
 		});
+
 		let ip = config.ip + ":" + config.port;
-		let token = config.token;
+		let header = {
+			'content-type': 'application/json'
+		};
+		header[configApp.authentication.headerKey] = config.token;
+
 		issues.forEach(function(issue){
-			var options = {
-				method: configApp.api.createIssue.method,
-				url: 'http://' + ip + configApp.api.createIssue.url,
-				headers: {
-					'content-type': 'application/json'
-				},
-				json: configApp.api.createIssue.format(issue, serverTaskManager.project)
-			};
-			console.log("verrrr")
-			console.log(configApp.api.createIssue.format(issue, serverTaskManager.project))
-			options.headers[configApp.authentication.headerKey] = token;
-
-			request(options, function (error, response, body) {
-				console.log(error)
-				console.log(body)
-
-				/*if (error)
-					res.status(500).json({error: "No se ha podido realizar la petición"});
-				else if(response.statusCode >= 400 && response.statusCode <= 500){
-					res.status(response.statusCode).json({error: body.errors[0]});
-				}else{
-					res.status(response.statusCode).json(configApp.api.addProject.formatResponse(body));
-				}*/
+			let body = configApp.api.createIssue.formatRequest(issue, config.project);
+			httpService.post(ip, header, configApp.api.createIssue.url, body).then(function(error, response, body){
+				console.log("Una exportada")
+			}).catch(function(error, response, body){
+				console.log("Una exportada con error")
 			});
-		})
+		});
 
-		res.status(200).json({info: "Incidencias exportadas correctamente"});
+		resolve({data: "Incidencias exportadas correctamente"});
 	});
 	return promise;
 
 }
+/*
+request(options, function (error, response, body) {
+	console.log(error)
+	console.log(body)
+
+	if (error)
+		res.status(500).json({error: "No se ha podido realizar la petición"});
+	else if(response.statusCode >= 400 && response.statusCode <= 500){
+		res.status(response.statusCode).json({error: body.errors[0]});
+	}else{
+		res.status(response.statusCode).json(configApp.api.addProject.formatResponse(body));
+	}
+});*/

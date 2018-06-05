@@ -61,32 +61,38 @@ function readAllProject(config){
 }
 
 function createProject(config, project){
-	let configApp = {};
-	appManagement.apps.forEach(function(app){
-		if(app.id == config.app){
-			configApp = app;
-		}
-	});
-	let ip = config.ip + ":" + config.port;
-	let header = {
-		'content-type': 'application/json'
-	};
-	header[configApp.authentication.headerKey] = config.token;
+	console.log(config)
+	console.log(project)
 
-	let body = configApp.api.addProject.formatRequest(project.name, project.key, project.description);
+	let promise = new Promise(function(resolve, reject){
+		let configApp = {};
+		appManagement.apps.forEach(function(app){
+			if(app.id == config.app){
+				configApp = app;
+			}
+		});
+		let ip = config.ip + ":" + config.port;
+		let header = {
+			'content-type': 'application/json'
+		};
+		header[configApp.authentication.headerKey] = config.token;
 
-	httpService.post(ip, header, configApp.api.createProject.url, body).then(function(error, response, body){
-		let format = configApp.api.getProjects.formatResponse(JSON.parse(body));
-		resolve({code: response.statusCode, data: format})
-	}).catch(function(error, response, body){
-		if (error)
-			reject({code: response.statusCode, error: "No se ha podido realizar la petición"})
-		else if(response.statusCode >= 400 && response.statusCode <= 500){
-			reject({code: response.statusCode, error: body.errors[0]})
-		}else{
-			reject({code: 500, error: "No se ha podido realizar la petición"})
-		}
+		let body = configApp.api.createProject.formatRequest(project.name, project.key, project.description);
+
+		httpService.post(ip, header, configApp.api.createProject.url, body).then(function(data){
+			let format = configApp.api.createProject.formatResponse(data.body);
+			resolve({code: data.response.statusCode, data: format})
+		}).catch(function(data){
+			if (data.error)
+				reject({code: response.statusCode, error: "No se ha podido realizar la petición"})
+			else if(data.response.statusCode >= 400 && data.response.statusCode <= 500){
+				reject({code: data.response.statusCode, error: data.body.errors[0]})
+			}else{
+				reject({code: 500, error: "No se ha podido realizar la petición"})
+			}
+		});
 	});
+	return promise;
 }
 
 
